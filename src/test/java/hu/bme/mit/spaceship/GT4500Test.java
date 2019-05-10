@@ -198,6 +198,38 @@ public class GT4500Test {
   }
 
   @Test
+  public void fireTorpedo_SingleTwice_PrimarySecondFailure(){
+    // Arrange
+    when(mock1.isEmpty()).thenReturn(false);
+    when(mock2.isEmpty()).thenReturn(true);
+    when(mock1.fire(1)).thenReturn(true);
+    when(mock2.fire(1)).thenReturn(false);
+
+    // Act
+    boolean result = ship.fireTorpedo(FiringMode.SINGLE);
+
+    when(mock1.isEmpty()).thenReturn(true);
+    when(mock1.fire(1)).thenReturn(false);
+
+    result = ship.fireTorpedo(FiringMode.SINGLE);
+
+    // Assert
+
+    verify(mock1, times(1)).fire(1);
+    verify(mock2, times(0)).fire(1);
+    assertEquals(false, result);
+  }
+
+  @Test
+  public void fireTorpedo_Single_WrongMode(){
+
+    // Act
+    boolean result = ship.fireTorpedo(FiringMode.TEST);
+
+    assertEquals(false, result);
+  }
+
+  @Test
   public void fireTorpedo_SingleTwice_SecondnotEmpty(){
     // Arrange
     when(mock1.isEmpty()).thenReturn(false);
